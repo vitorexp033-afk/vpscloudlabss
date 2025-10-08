@@ -305,6 +305,18 @@
             font-weight: bold;
             margin-bottom: 15px;
             color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .strain-counter {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
         }
 
         .strain-row {
@@ -375,7 +387,7 @@
             overflow: hidden;
         }
 
-        .purchase-btn:hover {
+        .purchase-btn:hover:not(.disabled) {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
@@ -393,6 +405,19 @@
         .purchase-btn-tertiary {
             background: linear-gradient(45deg, #FF9800, #F57C00);
             color: white;
+        }
+
+        /* Botões Desabilitados */
+        .purchase-btn.disabled {
+            background: #cccccc !important;
+            color: #666666 !important;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .purchase-btn.disabled:hover {
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         /* Informações sobre Strains */
@@ -896,7 +921,10 @@
                     <div class="product-price">R$ ${product.price.toFixed(2)}</div>
                     
                     <div class="strains-selector">
-                        <div class="strains-title">Selecione as Strains:</div>
+                        <div class="strains-title">
+                            Selecione as Strains:
+                            <span class="strain-counter" id="${product.id}-counter">Total: 0</span>
+                        </div>
                         <div class="strain-row">
                             <span class="strain-name">🌙 Indica</span>
                             <div class="strain-controls">
@@ -924,13 +952,13 @@
                     </div>
                     
                     <div class="purchase-buttons">
-                        <button class="purchase-btn purchase-btn-primary" onclick="openCheckout('${product.id}', 1)">
+                        <button class="purchase-btn purchase-btn-primary disabled" id="${product.id}-btn-1" onclick="openCheckout('${product.id}', 1)">
                             Comprar 1 unidade - R$ ${product.price.toFixed(2)}
                         </button>
-                        <button class="purchase-btn purchase-btn-secondary" onclick="openCheckout('${product.id}', 3)">
+                        <button class="purchase-btn purchase-btn-secondary disabled" id="${product.id}-btn-3" onclick="openCheckout('${product.id}', 3)">
                             3x R$ ${unitPrice3} cada (18% OFF)
                         </button>
-                        <button class="purchase-btn purchase-btn-tertiary" onclick="openCheckout('${product.id}', 5)">
+                        <button class="purchase-btn purchase-btn-tertiary disabled" id="${product.id}-btn-5" onclick="openCheckout('${product.id}', 5)">
                             5x R$ ${unitPrice5} cada (38% OFF)
                         </button>
                     </div>
@@ -953,6 +981,45 @@
             selectedStrains[productId][strain] = newValue;
             
             document.getElementById(`${productId}-${strain}`).textContent = newValue;
+            
+            // Atualizar contador total e botões
+            updateStrainCounter(productId);
+            updatePurchaseButtons(productId);
+        }
+
+        // Função para atualizar contador de strains
+        function updateStrainCounter(productId) {
+            const strains = selectedStrains[productId] || { indica: 0, sativa: 0, hibrida: 0 };
+            const total = strains.indica + strains.sativa + strains.hibrida;
+            
+            const counter = document.getElementById(`${productId}-counter`);
+            if (counter) {
+                counter.textContent = `Total: ${total}`;
+            }
+        }
+
+        // Função para atualizar botões de compra
+        function updatePurchaseButtons(productId) {
+            const strains = selectedStrains[productId] || { indica: 0, sativa: 0, hibrida: 0 };
+            const total = strains.indica + strains.sativa + strains.hibrida;
+            
+            const btn1 = document.getElementById(`${productId}-btn-1`);
+            const btn3 = document.getElementById(`${productId}-btn-3`);
+            const btn5 = document.getElementById(`${productId}-btn-5`);
+            
+            // Resetar todos os botões
+            [btn1, btn3, btn5].forEach(btn => {
+                if (btn) btn.classList.add('disabled');
+            });
+            
+            // Ativar botão correspondente ao total de strains
+            if (total === 1 && btn1) {
+                btn1.classList.remove('disabled');
+            } else if (total === 3 && btn3) {
+                btn3.classList.remove('disabled');
+            } else if (total === 5 && btn5) {
+                btn5.classList.remove('disabled');
+            }
         }
 
         // Função para obter strains selecionadas
@@ -965,8 +1032,15 @@
             const strains = getSelectedStrains(productId);
             const totalStrains = strains.indica + strains.sativa + strains.hibrida;
             
-            if (totalStrains === 0) {
-                showStrainWarning();
+            // Verificar se o botão está habilitado
+            const btn = document.getElementById(`${productId}-btn-${quantity}`);
+            if (btn && btn.classList.contains('disabled')) {
+                showStrainWarning(quantity);
+                return;
+            }
+            
+            if (totalStrains !== quantity) {
+                showStrainWarning(quantity);
                 return;
             }
             
@@ -1024,8 +1098,8 @@
         }
 
         // Função para mostrar aviso de strain
-        function showStrainWarning() {
-            alert('Por favor, selecione pelo menos 1 strain antes de comprar!');
+        function showStrainWarning(requiredQuantity) {
+            alert(`Para comprar ${requiredQuantity} unidade(s), você precisa selecionar exatamente ${requiredQuantity} strain(s)!`);
         }
 
         // Função para fechar checkout
@@ -1063,6 +1137,9 @@
             document.getElementById('pix-modal').style.display = 'block';
             
             const totalPrice = currentProduct.price * currentQuantity;
+            if (currentQuantity === 3) totalPrice *= 0.82;
+            if (currentQuantity === 5) totalPrice *= 0.62;
+            
             document.getElementById('pix-value').innerHTML = `<strong>Valor: R$ ${totalPrice.toFixed(2)}</strong>`;
             
             // Gerar código PIX
