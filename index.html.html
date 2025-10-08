@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Lab - Pods Premium de THC 97%</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+        }
+
+        .test-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            border: 2px solid #f0f0f0;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            color: white;
+            z-index: 10;
+        }
+
+        .badge-exclusive {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #333;
+            animation: shimmer 2s infinite;
+        }
+
+        .badge-limited {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            animation: glow 2s infinite;
+        }
+
+        .badge-basic {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        }
+
+        .frete-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+            100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(255, 107, 107, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.8); }
+            100% { box-shadow: 0 0 5px rgba(255, 107, 107, 0.5); }
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            background: #f8f9fa;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .strain-selector {
+            margin-bottom: 1.5rem;
+        }
+
+        .strain-selector h4 {
+            margin-bottom: 0.8rem;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .strain-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .strain-control {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+
+        .strain-name {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .strain-buttons {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .strain-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 50%;
+            background: #6c757d;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .strain-btn:hover {
+            background: #495057;
+            transform: scale(1.1);
+        }
+
+        .strain-count {
+            min-width: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .price-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 0.5rem;
+        }
+
+        .discount-info {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .purchase-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .purchase-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .purchase-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-1 {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .btn-3 {
+            background: linear-gradient(45deg, #ffc107, #fd7e14);
+            color: white;
+        }
+
+        .btn-5 {
+            background: linear-gradient(45deg, #dc3545, #e83e8c);
+            color: white;
+        }
+
+        .purchase-btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .strain-warning {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-method {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-method.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .finalize-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .finalize-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .pix-modal {
+            z-index: 2000;
+        }
+
+        .pix-modal .modal-content {
+            text-align: center;
+        }
+
+        .qr-code {
+            margin: 1rem 0;
+        }
+
+        .pix-code {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            word-break: break-all;
+            font-family: monospace;
+            margin: 1rem 0;
+        }
+
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+
+        .pix-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .pix-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-paid {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .strain-controls {
+                flex-direction: column;
+            }
+            
+            .payment-methods {
+                flex-direction: column;
+            }
+            
+            .test-button {
+                position: static;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="test-button" onclick="openTestCheckout()">🧪 TESTE R$ 1,00</button>
+        <h1>✨ CLOUD LAB ✨</h1>
+        <p>Pods Premium de THC 97% • Live Diamonds Resin</p>
+    </div>
+
+    <div class="container">
+        <!-- Produtos Exclusivos -->
+        <div class="section">
+            <h2 class="section-title">⭐ PRODUTOS EXCLUSIVOS ⭐</h2>
+            <p class="section-subtitle">Edições limitadas especiais com estoque ultra restrito! Designs únicos e premium.</p>
+            <div id="exclusive-products" class="products-grid">
+                <!-- Produtos serão carregados aqui -->
+            </div>
+        </div>
+
+        <!-- Edição Limitada -->
+        <div class="section">
+            <h2 class="section-title">🔥 EDIÇÃO LIMITADA 🔥</h2>
+            <p class="section-subtitle">Produtos únicos e limitados! Designs inovadores que você não encontra em nenhum outro lugar.</p>
+            <div id="limited-products" class="products-grid">
+                <!-- Produtos serão carregados aqui -->
+            </div>
+        </div>
+
+        <!-- Linha Básica -->
+        <div class="section">
+            <h2 class="section-title">🔥 LINHA BÁSICA 🔥</h2>
+            <p class="section-subtitle">Designs exclusivos e inovadores com excelente custo-benefício. Perfeitos para uso discreto e elegante.</p>
+            <div id="basic-products" class="products-grid">
+                <!-- Produtos serão carregados aqui -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Checkout -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCheckout()">&times;</span>
+            <h2>Finalizar Pedido</h2>
+            
+            <div id="orderSummary">
+                <!-- Resumo será preenchido dinamicamente -->
+            </div>
+
+            <div class="strain-warning" id="strainWarning">
+                ⚠️ Por favor, selecione pelo menos 1 strain antes de continuar!
+            </div>
+
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label for="customerName">Nome Completo *</label>
+                    <input type="text" id="customerName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerEmail">Email *</label>
+                    <input type="email" id="customerEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerPhone">WhatsApp *</label>
+                    <input type="tel" id="customerPhone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerCep">CEP (opcional)</label>
+                    <input type="text" id="customerCep">
+                </div>
+
+                <h3>Método de Pagamento</h3>
+                <div class="payment-methods">
+                    <div class="payment-method selected" data-method="pix">
+                        <strong>🏦 PIX</strong><br>
+                        <small>Pagamento instantâneo<br>5% desconto</small>
+                    </div>
+                    <div class="payment-method" data-method="card">
+                        <strong>💳 Cartão</strong><br>
+                        <small>Visa, Mastercard, Elo<br>Até 12x sem juros</small>
+                    </div>
+                    <div class="payment-method" data-method="boleto">
+                        <strong>🏧 Boleto</strong><br>
+                        <small>Vencimento em 3 dias<br>Aprovação em 1-2 dias</small>
+                    </div>
+                </div>
+
+                <button type="submit" class="finalize-btn">Finalizar Pedido</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal PIX -->
+    <div id="pixModal" class="modal pix-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePixModal()">&times;</span>
+            <h2>Pagamento via PIX</h2>
+            
+            <p>Escaneie o QR Code ou copie o código PIX para finalizar seu pagamento</p>
+            
+            <div class="qr-code" id="qrCodeContainer">
+                <!-- QR Code será gerado aqui -->
+            </div>
+            
+            <div class="pix-code" id="pixCode">
+                <!-- Código PIX será gerado aqui -->
+            </div>
+            
+            <button class="copy-btn" onclick="copyPixCode()">📋 Copiar Código PIX</button>
+            
+            <p><strong>Valor: R$ <span id="pixAmount"></span></strong></p>
+            <p><small>Este PIX expira em 30 minutos</small></p>
+            
+            <div class="pix-buttons">
+                <button class="pix-btn btn-cancel" onclick="closePixModal()">Cancelar</button>
+                <button class="pix-btn btn-paid" onclick="confirmPayment()">✅ Já Paguei</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
