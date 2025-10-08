@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Lab - Pods Premium de THC 97%</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Space Grotesk', 'Orbitron', system-ui, -apple-system, sans-serif;
+        }
+        .logo-font {
+            font-family: 'Orbitron', 'Space Grotesk', system-ui, sans-serif;
+            font-weight: 700;
+        }
+        .tech-font {
+            font-family: 'Space Grotesk', system-ui, sans-serif;
+        }
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-float:hover {
+            background-color: #128c7e;
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px -5px rgba(37, 211, 102, 0.4);
+        }
+
+        .checkout-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 1rem;
+        }
+        
+        /* Modal PIX com z-index maior para ficar na frente */
+        .pix-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            padding: 1rem;
+        }
+        
+        .pix-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        .hidden { display: none !important; }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        
+        /* Animações especiais para produtos exclusivos */
+        .exclusive-glow {
+            animation: exclusiveGlow 3s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        @keyframes exclusiveGlow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+                transform: scale(1.02);
+            }
+        }
+        
+        /* Animações para edição limitada */
+        .limited-edition-pulse {
+            animation: limitedPulse 2s ease-in-out infinite;
+        }
+        @keyframes limitedPulse {
+            0%, 100% { 
+                border-color: rgb(239, 68, 68);
+                box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+            }
+            50% { 
+                border-color: rgb(236, 72, 153);
+                box-shadow: 0 0 25px rgba(236, 72, 153, 0.5);
+            }
+        }
+        
+        /* Efeito de brilho nos badges */
+        .badge-shine {
+            position: relative;
+            overflow: hidden;
+        }
+        .badge-shine::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* Contador de estoque com urgência */
+        .stock-urgent {
+            animation: stockUrgent 1.5s ease-in-out infinite;
+        }
+        @keyframes stockUrgent {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+
+    <!-- Site Principal -->
+    <div id="mainSite">
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-purple-600 via-blue-600 to-purple-800 text-white py-6 shadow-2xl">
+            <div class="container mx-auto px-4 text-center relative">
+                <h1 class="logo-font text-4xl md:text-6xl font-black mb-2 bg-gradient-to-r from-orange-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
+                    ✨ CLOUD LAB ✨
+                </h1>
+                <p class="tech-font text-lg md:text-xl font-semibold opacity-90">
+                    Pods Premium de THC 97% • Live Diamonds Resin
+                </p>
+                
+                <!-- Botão de Teste R$ 1,00 -->
+                <button onclick="openTestCheckout()" 
+                        class="absolute top-4 right-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg transform hover:scale-105 transition-all duration-300 animate-pulse">
+                    🧪 TESTE R$ 1,00
+                </button>
+            </div>
+        </header>
+
+        <!-- Produto Exclusivo -->
+        <section class="py-16 px-4 bg-gradient-to-br from-yellow-50 to-orange-100">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="logo-font text-4xl md:text-5xl font-black mb-4 flex items-center justify-center gap-3">
+                        ⭐ <span class="bg-gradient-to-r from-yellow-500 to-orange-600 bg-clip-text text-transparent">PRODUTOS EXCLUSIVOS</span> ⭐
+                    </h2>
+                    <p class="tech-font text-lg text-gray-600 max-w-2xl mx-auto font-semibold">
+                        Edições limitadas especiais com estoque ultra restrito! Designs únicos e premium.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto" id="exclusiveProducts">
+                    <!-- Produtos exclusivos serão inseridos aqui via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Edição Limitada -->
+        <section class="py-16 px-4">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="logo-font text-4xl md:text-5xl font-black mb-4 flex items-center justify-center gap-3">
+                        🔥 <span class="bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent">EDIÇÃO LIMITADA</span> 🔥
+                    </h2>
+                    <p class="tech-font text-lg text-gray-600 max-w-2xl mx-auto font-semibold">
+                        Produtos únicos e limitados! Designs inovadores que você não encontra em nenhum outro lugar.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="limitedProducts">
+                    <!-- Produtos edição limitada serão inseridos aqui via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Linha Básica -->
+        <section class="py-16 px-4 bg-gradient-to-br from-gray-50 to-gray-100">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="logo-font text-4xl md:text-5xl font-black mb-4 flex items-center justify-center gap-3">
+                        🔥 <span class="bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">LINHA BÁSICA</span> 🔥
+                    </h2>
+                    <p class="tech-font text-lg text-gray-600 max-w-2xl mx-auto font-semibold">
+                        Designs exclusivos e inovadores com excelente custo-benefício. Perfeitos para uso discreto e elegante.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="basicProducts">
+                    <!-- Produtos serão inseridos aqui via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Educativa -->
+        <section class="py-16 px-4 bg-gradient-to-br from-gray-50 to-gray-100">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="logo-font text-3xl md:text-4xl font-bold mb-4 text-gray-800">
+                        🌿 ENTENDA CADA TIPO DE ONDA 🌿
+                    </h2>
+                    <p class="tech-font text-lg text-gray-600 mb-8">
+                        Escolha a experiência perfeita para cada momento do seu dia
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border-2 border-purple-200 shadow-lg">
+                        <div class="text-center mb-4">
+                            <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-2xl">🌙</span>
+                            </div>
+                            <h3 class="logo-font text-2xl font-bold text-purple-800 mb-2">INDICA</h3>
+                            <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm font-semibold">
+                                Onda Relaxante
+                            </span>
+                        </div>
+                        <div class="space-y-3 text-gray-700">
+                            <p class="tech-font text-sm leading-relaxed">
+                                <strong>Perfeita para o final do dia</strong> - A Indica proporciona um efeito profundamente relaxante que acalma corpo e mente.
+                            </p>
+                            <p class="tech-font text-sm leading-relaxed">
+                                <strong>Ideal para:</strong> Relaxamento, alívio do estresse, melhora do sono, momentos de introspecção e descanso após um dia intenso.
+                            </p>
+                            <p class="tech-font text-sm leading-relaxed">
+                                <strong>Sensação:</strong> Corpo pesado, mente tranquila, sensação de paz e bem-estar profundo.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200 shadow-lg">
+                        <div class="text-center mb-4">
+                            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-2xl">☀️</span>
+                            </div>
+                            <h3 class="logo-font text-2xl font-bold text-green-800 mb-2">SATIVA</h3>
+                            <span class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                                Onda Energizante
+                            </span>
+                        </div>
+                        <div class="space-y-3 text-gray-700">
+                            <p class="tech-font text-sm leading-relaxed">
+                                <strong>Energia para o seu dia</strong> - A Sativa oferece um efeito estimulante que desperta criatividade e foco mental.
+                            </p>
+                            <p class="tech-font text-sm leading-relaxed">
+                                <strong>Ideal para:</strong> Atividades criativas, socialização, exercícios, trabalho que exige concentração e momentos de diversão.
+                            </p>
+                            <p class="tech-font text-sm leading-relaxed">
+                                <strong>Sensação:</strong> Mente ativa, energia elevada, criatividade em alta e disposição para ação.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border-2 border-blue-200 shadow-lg">
+                        <div class="text-center mb-4">
+                            <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-2xl">⚖️</span>
+                            </div>
+                            <h3 class="logo-font text-2xl font-bold text-blue-800 mb-2">HÍBRIDA</h3>
+                            <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                                Onda Equilibrada
+                            </span>
+                        </div>
+                        <div class="space-y-3 text-gray-700">
+                            <p class="tech-font text-sm leading-relaxed">
+                                <strong>O melhor dos dois mundos</strong> - A Híbrida combina os benefícios da Indica e Sativa em perfeito equilíbrio.
+                            </p>
+                            <p class="tech-font text-sm leading-relaxed">
+                                <strong>Ideal para:</strong> Qualquer momento do dia, atividades sociais, relaxamento ativo, trabalho criativo e versatilidade total.
+                            </p>
+                            <p class="tech-font text-sm leading-relaxed">
+                                <strong>Sensação:</strong> Equilíbrio perfeito entre relaxamento e energia, adaptando-se ao seu estado de espírito.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews -->
+        <section class="py-16 px-4 bg-gradient-to-br from-gray-100 to-gray-200">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="logo-font text-3xl md:text-4xl font-bold mb-4 text-gray-800">
+                        ⭐ AVALIAÇÕES DOS CLIENTES ⭐
+                    </h2>
+                    <p class="tech-font text-lg text-gray-600 mb-8">
+                        Mais de 6.000 clientes satisfeitos com nossos produtos premium
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-yellow-400 mr-3">
+                                ⭐⭐⭐⭐⭐
+                            </div>
+                            <span class="font-semibold text-gray-800">Kane G.</span>
+                        </div>
+                        <p class="text-gray-600 italic">
+                            "Muito discreto, parece ainda melhor pessoalmente. Vem com três modos e funciona muito bem mesmo no modo mais baixo."
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-yellow-400 mr-3">
+                                ⭐⭐⭐⭐⭐
+                            </div>
+                            <span class="font-semibold text-gray-800">Seth M.</span>
+                        </div>
+                        <p class="text-gray-600 italic">
+                            "Produto de primeira qualidade! Design inovador e funcionalidade perfeita. Recomendo muito!"
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                        <div class="flex items-center mb-3">
+                            <div class="flex text-yellow-400 mr-3">
+                                ⭐⭐⭐⭐⭐
+                            </div>
+                            <span class="font-semibold text-gray-800">Marina S.</span>
+                        </div>
+                        <p class="text-gray-600 italic">
+                            "Design exclusivo e qualidade americana. Entrega rápida e produto exatamente como esperado!"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gradient-to-r from-purple-600 via-blue-600 to-purple-800 text-white py-8">
+            <div class="container mx-auto px-4 text-center">
+                <h3 class="logo-font text-2xl font-bold mb-2 bg-gradient-to-r from-orange-400 to-pink-400 bg-clip-text text-transparent">
+                    ✨ CLOUD LAB BRASIL ✨
+                </h3>
+                <p class="tech-font text-sm opacity-80">
+                    © 2024 Cloud Lab Brasil. Todos os direitos reservados.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/5547920514380?text=Olá! Gostaria de saber mais sobre os pods Cloud Lab!" target="_blank" class="whatsapp-float">
+        📱
+    </a>
+
+    <!-- Modal de Checkout -->
+    <div id="checkoutModal" class="checkout-modal hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-90vh overflow-y-auto relative">
+            <div class="sticky top-0 bg-white p-6 border-b border-gray-200 rounded-t-2xl">
+                <button onclick="closeCheckout()" class="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center text-gray-600 font-bold">
+                    ✕
+                </button>
+                <h2 class="logo-font text-2xl font-bold text-gray-800">🛒 Finalizar Pedido</h2>
+            </div>
+            
+            <div class="p-6">
+                <!-- Resumo do Pedido -->
+                <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-4 rounded-lg mb-6">
+                    <h3 class="font-bold text-purple-800 mb-2">📋 Resumo do Pedido</h3>
+                    <div id="orderSummary"></div>
+                </div>
+
+                <!-- Dados do Cliente -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-gray-800 mb-4">👤 Seus Dados</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Nome Completo *</label>
+                            <input type="text" id="customerName" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Email *</label>
+                            <input type="email" id="customerEmail" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">WhatsApp *</label>
+                            <input type="tel" id="customerPhone" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">CEP</label>
+                            <input type="text" id="customerZip" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formas de Pagamento -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-gray-800 mb-4">💳 Escolha a Forma de Pagamento</h3>
+                    <div class="space-y-3">
+                        <div class="payment-method border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500" onclick="selectPayment('pix')">
+                            <div class="flex items-center">
+                                <input type="radio" name="payment" value="pix" class="mr-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-2xl">🏦</span>
+                                    <div>
+                                        <h4 class="font-semibold">PIX</h4>
+                                        <p class="text-sm text-gray-600">Pagamento instantâneo com 5% de desconto</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-method border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500" onclick="selectPayment('card')">
+                            <div class="flex items-center">
+                                <input type="radio" name="payment" value="card" class="mr-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-2xl">💳</span>
+                                    <div>
+                                        <h4 class="font-semibold">Cartão de Crédito</h4>
+                                        <p class="text-sm text-gray-600">Visa, Mastercard, Elo - Parcelamento até 12x</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-method border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500" onclick="selectPayment('boleto')">
+                            <div class="flex items-center">
+                                <input type="radio" name="payment" value="boleto" class="mr-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-2xl">🏧</span>
+                                    <div>
+                                        <h4 class="font-semibold">Boleto Bancário</h4>
+                                        <p class="text-sm text-gray-600">Vencimento em 3 dias úteis</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campos do Cartão -->
+                <div id="cardFields" class="hidden mb-6">
+                    <h4 class="font-semibold text-gray-800 mb-3">💳 Dados do Cartão</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Número do Cartão</label>
+                            <input type="text" id="cardNumber" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="0000 0000 0000 0000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Nome no Cartão</label>
+                            <input type="text" id="cardName" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Validade</label>
+                            <input type="text" id="cardExpiry" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="MM/AA">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">CVV</label>
+                            <input type="text" id="cardCvv" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Parcelas</label>
+                            <select id="cardInstallments" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
+                                <option value="1">1x sem juros</option>
+                                <option value="2">2x sem juros</option>
+                                <option value="3">3x sem juros</option>
+                                <option value="6">6x com juros</option>
+                                <option value="12">12x com juros</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão Finalizar -->
+                <button onclick="processPayment()" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-4 px-6 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg text-lg">
+                    💳 Finalizar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
