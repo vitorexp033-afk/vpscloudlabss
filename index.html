@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cloud Lab - Pods THC Premium | Entrega Discreta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(to right, #a855f7, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        
+        .cart-modal {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .cart-modal.open {
+            transform: translateX(0);
+        }
+        
+        .modal-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+        
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .btn-selected {
+            background: #06b6d4 !important;
+            color: black !important;
+        }
+        
+        .btn-strain-selected {
+            ring: 2px solid #06b6d4 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-black text-white">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-black/90 backdrop-blur-sm border-b border-gray-800">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="text-3xl">☁️</div>
+                <h1 class="text-2xl font-bold gradient-text">CLOUD LAB</h1>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button onclick="toggleCart()" class="border border-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 relative">
+                    🛒 <span id="cart-count">0</span>
+                    <span id="cart-badge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden"></span>
+                </button>
+                <button class="border border-gray-700 px-4 py-2 rounded-lg hover:bg-gray-800">💬</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Modal -->
+    <div id="cart-overlay" class="modal-overlay fixed inset-0 bg-black/50 z-50">
+        <div id="cart-modal" class="cart-modal fixed right-0 top-0 h-full w-96 bg-gray-900">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-white">Carrinho</h2>
+                    <button onclick="toggleCart()" class="text-white hover:bg-gray-800 p-2 rounded">✕</button>
+                </div>
+
+                <div id="cart-items" class="space-y-4 mb-6 max-h-96 overflow-y-auto">
+                    <p class="text-gray-400 text-center py-8">Carrinho vazio</p>
+                </div>
+
+                <div id="cart-total" class="border-t border-gray-700 pt-4 hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-white font-bold text-lg">Total:</span>
+                        <span id="total-price" class="text-cyan-400 font-bold text-2xl">R$ 0,00</span>
+                    </div>
+                    <button class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg">
+                        Finalizar Compra
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="py-8 md:py-16 text-center px-4">
+        <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+            Os Melhores Pods THC do Brasil 🇧🇷
+        </h2>
+        
+        <div class="max-w-md mx-auto mb-8">
+            <div class="flex gap-2">
+                <input type="text" placeholder="Pesquisar produtos..." class="flex-1 px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400">
+                <button class="bg-cyan-500 hover:bg-cyan-600 text-black px-6 py-3 rounded-lg font-bold">🔍 Buscar</button>
+            </div>
+        </div>
+
+        <!-- Promoção Banner -->
+        <div class="bg-gradient-to-r from-pink-500 to-orange-500 rounded-2xl p-4 md:p-6 mb-8 max-w-4xl mx-auto">
+            <h3 class="text-lg md:text-2xl font-bold mb-2 leading-tight">
+                🔥 ÚLTIMAS 12 HORAS! Promoção acaba à meia-noite! Garante já o seu! 🔥
+            </h3>
+        </div>
+
+        <!-- Benefícios -->
+        <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 mb-8 md:mb-12">
+            <div class="flex items-center gap-2">
+                <span class="text-green-400">🚚</span>
+                <span class="text-sm md:text-base">FRETE GRÁTIS</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-blue-400">📦</span>
+                <span class="text-sm md:text-base">Envio em 24h</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-purple-400">🛡️</span>
+                <span class="text-sm md:text-base">Embalagem Discreta</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Linha Exclusiva -->
+    <section class="py-8 md:py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-4xl font-bold text-center mb-4">✨ LINHA EXCLUSIVA ✨</h2>
+            <p class="text-center text-gray-400 mb-8 md:mb-12 text-sm md:text-base">
+                Edições limitadas com design único e tecnologia avançada
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8" id="produtos-exclusiva"></div>
+        </div>
+    </section>
+
+    <!-- Linha Premium -->
+    <section class="py-8 md:py-16 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-4xl font-bold text-center mb-4">🔥 LINHA PREMIUM 🔥</h2>
+            <p class="text-center text-gray-400 mb-8 md:mb-12 text-sm md:text-base">
+                Edição limitada com designs únicos e qualidade superior
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="produtos-premium"></div>
+        </div>
+    </section>
+
+    <!-- Tipos de Cannabis -->
+    <section class="py-8 md:py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">🌿 Entenda os Tipos de Cannabis 🌿</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                <div class="text-center p-4 md:p-6 bg-gray-800 rounded-2xl">
+                    <div class="text-4xl md:text-6xl mb-4">🌙</div>
+                    <h3 class="text-xl md:text-2xl font-bold mb-4">INDICA</h3>
+                    <p class="text-gray-300 text-sm md:text-base">Efeito relaxante e calmante. Ideal para o final do dia, alívio do estresse e insônia.</p>
+                </div>
+                <div class="text-center p-4 md:p-6 bg-gray-800 rounded-2xl">
+                    <div class="text-4xl md:text-6xl mb-4">☀️</div>
+                    <h3 class="text-xl md:text-2xl font-bold mb-4">SATIVA</h3>
+                    <p class="text-gray-300 text-sm md:text-base">Efeito energizante e estimulante. Perfeita para atividades criativas e durante o dia.</p>
+                </div>
+                <div class="text-center p-4 md:p-6 bg-gray-800 rounded-2xl">
+                    <div class="text-4xl md:text-6xl mb-4">⚖️</div>
+                    <h3 class="text-xl md:text-2xl font-bold mb-4">HÍBRIDA</h3>
+                    <p class="text-gray-300 text-sm md:text-base">Combinação equilibrada dos efeitos Indica e Sativa. Ideal para qualquer momento.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Linha Básica -->
+    <section class="py-8 md:py-16 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-4xl font-bold text-center mb-4">💚 LINHA BÁSICA 💚</h2>
+            <p class="text-center text-gray-400 mb-8 md:mb-12 text-sm md:text-base">
+                Qualidade garantida com o melhor custo-benefício
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="produtos-basica"></div>
+        </div>
+    </section>
+
+    <!-- Avaliações -->
+    <section class="py-8 md:py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">⭐ Avaliações dos Clientes ⭐</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                <div class="bg-gray-800 p-6 rounded-2xl">
+                    <div class="flex items-center gap-2 mb-4">
+                        <h4 class="font-bold">Carlos M.</h4>
+                        <div class="flex">⭐⭐⭐⭐⭐</div>
+                        <span class="text-green-400 text-sm">✅ Compra Verificada</span>
+                    </div>
+                    <p class="text-gray-300">"Produto incrível! O Love THC é muito discreto e a qualidade é excepcional. Entrega rápida e embalagem perfeita. Recomendo!"</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-2xl">
+                    <div class="flex items-center gap-2 mb-4">
+                        <h4 class="font-bold">Ana P.</h4>
+                        <div class="flex">⭐⭐⭐⭐⭐</div>
+                        <span class="text-green-400 text-sm">✅ Compra Verificada</span>
+                    </div>
+                    <p class="text-gray-300">"Comprei o Fufu THC e adorei! Super discreto, ninguém suspeita. A qualidade é top e o atendimento no WhatsApp é excelente!"</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-2xl">
+                    <div class="flex items-center gap-2 mb-4">
+                        <h4 class="font-bold">João S.</h4>
+                        <div class="flex">⭐⭐⭐⭐⭐</div>
+                        <span class="text-green-400 text-sm">✅ Compra Verificada</span>
+                    </div>
+                    <p class="text-gray-300">"Melhor investimento! O Canetão THC é perfeito para o trabalho. Ninguém desconfia e a qualidade é surpreendente. Já comprei 3 vezes!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-black border-t border-gray-800">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">© 2024 Cloud Lab - Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dados dos produtos
+        const produtos = {
+            exclusiva: [
+                {
+                    id: 'love-thc',
+                    nome: 'Love THC - Coração 2 em 1',
+                    descricao: 'Design exclusivo em formato de coração com tecnologia 2 em 1. Pod de THC 97% com Live Diamonds Resin para experiência única e discreta. Acabamento premium com detalhes dourados.',
+                    preco: 300,
+                    imagem: 'LOVETHC.png',
+                    strains: ['Indica', 'Sativa', 'Híbrida']
+                },
+                {
+                    id: 'chave-thc',
+                    nome: 'Chave THC - Chave de Carro',
+                    descricao: 'Formato inovador de chave de carro para máxima discrição. THC 95% com terpenos naturais. Perfeito para uso discreto em qualquer ambiente. Design realista e funcional.',
+                    preco: 300,
+                    imagem: 'CHAVETHC.png',
+                    strains: ['Indica', 'Sativa', 'Híbrida']
+                }
+            ],
+            premium: [
+                {
+                    id: 'fufu-thc',
+                    nome: 'Fufu THC - Personagem Kawaii',
+                    descricao: 'Design kawaii exclusivo com personagem Fufu. THC 94% com blend de terpenos frutados. Ideal para quem busca discrição com estilo único e divertido. Edição limitada colecionável.',
+                    preco: 280,
+                    imagem: 'FUFUTHC.png',
+                    strains: ['Indica', 'Sativa', 'Híbrida']
+                },
+                {
+                    id: 'raygan-thc',
+                    nome: 'Raygan THC - Pistola de Raio',
+                    descricao: 'Design futurista de pistola de raio com LEDs. THC 96% com efeito energizante. Perfeito para gamers e entusiastas de ficção científica. Tecnologia de ponta em formato inovador.',
+                    preco: 280,
+                    imagem: 'RAYGANTHC.png',
+                    strains: ['Indica', 'Sativa', 'Híbrida']
+                },
+                {
+                    id: 'robot-thc',
+                    nome: 'Robot THC - Robô com Controle',
+                    descricao: 'Design inovador de robô com controle remoto incluído. THC 95% com tecnologia avançada. Perfeito para entusiastas de tecnologia. Edição limitada com recursos únicos.',
+                    preco: 280,
+                    imagem: 'ROBOTHC.png',
+                    strains: ['Indica', 'Sativa', 'Híbrida']
+                }
+            ],
+            basica: [
+                {
+                    id: 'canetao-thc',
+                    nome: 'Canetão THC - Caneta Gigante',
+                    descricao: 'Formato de caneta gigante para máxima discrição no ambiente de trabalho. THC 90% com terpenos naturais. Ideal para uso profissional discreto. Design ergonômico e funcional.',
+                    preco: 250,
+                    imagem: 'CANETAOTHC.png',
+                    strains: ['Indica', 'Sativa', 'Híbrida']
+                },
+                {
+                    id: 'minibolsa-thc',
+                    nome: 'Mini Bolsa THC',
+                    descricao: 'Design discreto em formato de mini bolsa com fecho dourado. THC 97% com sistema de botão liga/desliga. Guarda-refil para cartuchos de 1ml. Entrada USB para carregamento.',
+                    preco: 250,
+                    imagem: 'MINIBOLSATHC.png',
+                    strains: ['Indica', 'Sativa', 'Híbrida']
+                },
+                {
+                    id: 'gucci-thc',
+                    nome: 'Gucci THC',
+                    descricao: 'Design inspirado em bolsa de grife com padrão exclusivo. THC 93% com acabamento premium. Perfeito para quem busca estilo e discrição. Inclui chaveiro e acessórios.',
+                    preco: 250,
+                    imagem: 'GUCCITHC.png',
+                    strains: ['Indica', 'Sativa', 'Híbrida']
+                }
+            ]
+        };
+
+        // Estado do carrinho
+        let carrinho = [];
+        let produtoStates = {};
+
+        // Funções de preço
+        function calcularPreco(precoBase, quantidade) {
+            if (precoBase === 300) {
+                switch(quantidade) {
+                    case 1: return 300;
+                    case 2: return 480;
+                    case 3: return 690;
+                    default: return precoBase;
+                }
+            } else if (precoBase === 280) {
+                switch(quantidade) {
+                    case 1: return 280;
+                    case 2: return 448;
+                    case 3: return 644;
+                    default: return precoBase;
+                }
+            } else if (precoBase === 250) {
+                switch(quantidade) {
+                    case 1: return 250;
+                    case 2: return 400;
+                    case 3: return 575;
+                    default: return precoBase;
+                }
+            }
+            return precoBase;
+        }
+
+        function calcularDesconto(precoBase, quantidade) {
+            const precoOriginal = precoBase * quantidade;
+            const precoComDesconto = calcularPreco(precoBase, quantidade);
+            if (quantidade === 1) return 0;
+            return Math.round(((precoOriginal - precoComDesconto) / precoOriginal) * 100);
+        }
+
+        // Função para criar card de produto
+        function criarProdutoCard(produto, categoria) {
+            const produtoId = produto.id;
+            if (!produtoStates[produtoId]) {
+                produtoStates[produtoId] = {
+                    quantidadeSelecionada: 1,
+                    strainsSelecionadas: [produto.strains[0]]
+                };
+            }
+
+            const state = produtoStates[produtoId];
+            const precoAtual = calcularPreco(produto.preco, state.quantidadeSelecionada);
+            const descontoAtual = calcularDesconto(produto.preco, state.quantidadeSelecionada);
+            const precoOriginal = produto.preco * state.quantidadeSelecionada;
+            const podeAdicionar = state.strainsSelecionadas.length === state.quantidadeSelecionada;
+
+            const badgeCategoria = categoria === 'exclusiva' ? '💎 EXCLUSIVO' : 
+                                 categoria === 'premium' ? '🔥 LIMITADO' : '💚 BÁSICO';
+            const corBadge = categoria === 'exclusiva' ? 'bg-yellow-500 text-black' : 
+                           categoria === 'premium' ? 'bg-red-500 text-white' : 'bg-green-500 text-white';
+
+            return `
+                <div class="bg-gray-900 rounded-2xl p-4 md:p-6 border border-gray-800 hover:border-purple-500 transition-all duration-300 hover-scale">
+                    <div class="relative mb-4">
+                        <div class="absolute top-2 left-2 px-2 md:px-3 py-1 rounded-full text-xs font-bold ${corBadge}">
+                            ${badgeCategoria}
+                        </div>
+                        ${descontoAtual > 0 ? `
+                            <div class="absolute top-2 right-2 px-2 md:px-3 py-1 rounded-full text-xs font-bold bg-red-500 text-white">
+                                -${descontoAtual}%
+                            </div>
+                        ` : ''}
+                        <img src="${produto.imagem}" alt="${produto.nome}" class="w-full h-48 md:h-64 object-contain bg-gray-800 rounded-xl">
+                    </div>
+                    
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-2">${produto.nome}</h3>
+                    <p class="text-gray-300 text-xs md:text-sm mb-4 leading-relaxed">${produto.descricao}</p>
+                    
+                    <!-- Seletor de Quantidade -->
+                    <div class="mb-4">
+                        <p class="text-xs md:text-sm text-gray-400 mb-2">Escolha a quantidade:</p>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <button onclick="selecionarQuantidade('${produtoId}', 1)" 
+                                    class="px-3 md:px-4 py-2 rounded-lg font-bold text-xs md:text-sm transition-all ${state.quantidadeSelecionada === 1 ? 'btn-selected' : 'bg-gray-700 text-white hover:bg-gray-600'}">
+                                1 Pod - R$ ${produto.preco}
+                            </button>
+                            <button onclick="selecionarQuantidade('${produtoId}', 2)" 
+                                    class="px-3 md:px-4 py-2 rounded-lg font-bold text-xs md:text-sm transition-all relative ${state.quantidadeSelecionada === 2 ? 'btn-selected' : 'bg-gray-700 text-white hover:bg-gray-600'}">
+                                2 Pods - R$ ${calcularPreco(produto.preco, 2)}
+                                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded">
+                                    -${calcularDesconto(produto.preco, 2)}%
+                                </span>
+                            </button>
+                            <button onclick="selecionarQuantidade('${produtoId}', 3)" 
+                                    class="px-3 md:px-4 py-2 rounded-lg font-bold text-xs md:text-sm transition-all relative ${state.quantidadeSelecionada === 3 ? 'btn-selected' : 'bg-gray-700 text-white hover:bg-gray-600'}">
+                                3 Pods - R$ ${calcularPreco(produto.preco, 3)}
+                                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded">
+                                    -${calcularDesconto(produto.preco, 3)}%
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Seletor de Strain -->
+                    <div class="mb-4">
+                        <p class="text-xs md:text-sm text-gray-400 mb-2">
+                            Escolha ${state.quantidadeSelecionada} tipo${state.quantidadeSelecionada > 1 ? 's' : ''} de extração:
+                            <span class="text-cyan-400 ml-2">
+                                (${state.strainsSelecionadas.length}/${state.quantidadeSelecionada} selecionada${state.quantidadeSelecionada > 1 ? 's' : ''})
+                            </span>
+                        </p>
+                        <div class="flex gap-2 flex-wrap">
+                            ${produto.strains.map(strain => {
+                                const isSelected = state.strainsSelecionadas.includes(strain);
+                                const canSelect = state.strainsSelecionadas.length < state.quantidadeSelecionada || isSelected;
+                                const emoji = strain === 'Indica' ? '🌙' : strain === 'Sativa' ? '☀️' : '⚖️';
+                                const cor = strain === 'Indica' ? 'bg-blue-500' : strain === 'Sativa' ? 'bg-orange-500' : 'bg-purple-500';
+                                
+                                return `
+                                    <button onclick="toggleStrain('${produtoId}', '${strain}')" 
+                                            ${!canSelect && !isSelected ? 'disabled' : ''}
+                                            class="flex items-center gap-1 md:gap-2 px-2 md:px-3 py-2 rounded-lg font-bold text-xs md:text-sm transition-all ${
+                                                isSelected ? `${cor} text-white btn-strain-selected` :
+                                                canSelect ? 'bg-gray-700 text-white hover:bg-gray-600' :
+                                                'bg-gray-800 text-gray-500 cursor-not-allowed'
+                                            }">
+                                        <span class="text-sm md:text-lg">${emoji}</span>
+                                        ${strain}
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                        ${state.strainsSelecionadas.length > 0 ? `
+                            <div class="mt-2 text-xs text-gray-400">
+                                Selecionadas: ${state.strainsSelecionadas.join(', ')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="text-center mb-4">
+                        ${descontoAtual > 0 ? `
+                            <div class="text-lg text-gray-400 line-through">R$ ${precoOriginal},00</div>
+                        ` : ''}
+                        <div class="text-3xl font-bold text-cyan-400">R$ ${precoAtual},00</div>
+                        ${descontoAtual > 0 ? `
+                            <div class="text-sm text-green-400 font-bold">
+                                Economia de R$ ${precoOriginal - precoAtual},00 (${descontoAtual}% OFF)
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <button onclick="adicionarAoCarrinho('${produtoId}')" 
+                                ${!podeAdicionar ? 'disabled' : ''}
+                                class="flex-1 font-bold text-sm ${podeAdicionar ? 'bg-white hover:bg-gray-100 text-black border-2 border-white' : 'bg-gray-600 text-gray-400 cursor-not-allowed'}">
+                            🛒 ${podeAdicionar ? 'Adicionar ao Carrinho' : `Selecione ${state.quantidadeSelecionada - state.strainsSelecionadas.length} strain${state.quantidadeSelecionada - state.strainsSelecionadas.length > 1 ? 's' : ''}`}
+                        </button>
+                        <button ${!podeAdicionar ? 'disabled' : ''}
+                                class="flex-1 font-bold text-sm ${podeAdicionar ? 'bg-red-500 hover:bg-red-600 text-white border-2 border-red-500' : 'bg-gray-600 text-gray-400 cursor-not-allowed'}">
+                            ⚡ Comprar Agora
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Função para selecionar quantidade
+        function selecionarQuantidade(produtoId, quantidade) {
+            produtoStates[produtoId].quantidadeSelecionada = quantidade;
+            produtoStates[produtoId].strainsSelecionadas = [produtos.exclusiva.concat(produtos.premium, produtos.basica).find(p => p.id === produtoId).strains[0]];
+            renderizarProdutos();
+        }
+
+        // Função para toggle strain
+        function toggleStrain(produtoId, strain) {
+            const state = produtoStates[produtoId];
+            const maxStrains = state.quantidadeSelecionada;
+            
+            if (state.strainsSelecionadas.includes(strain)) {
+                if (state.strainsSelecionadas.length > 1) {
+                    state.strainsSelecionadas = state.strainsSelecionadas.filter(s => s !== strain);
+                }
+            } else {
+                if (state.strainsSelecionadas.length < maxStrains) {
+                    state.strainsSelecionadas.push(strain);
+                } else {
+                    state.strainsSelecionadas[state.strainsSelecionadas.length - 1] = strain;
+                }
+            }
+            renderizarProdutos();
+        }
+
+        // Função para adicionar ao carrinho
+        function adicionarAoCarrinho(produtoId) {
+            const produto = produtos.exclusiva.concat(produtos.premium, produtos.basica).find(p => p.id === produtoId);
+            const state = produtoStates[produtoId];
+            
+            const strainsString = state.strainsSelecionadas.join(', ');
+            const itemId = `${produtoId}-${state.quantidadeSelecionada}-${strainsString}`;
+            const precoTotal = calcularPreco(produto.preco, state.quantidadeSelecionada);
+            
+            const itemExistente = carrinho.find(item => item.id === itemId);
+            
+            if (itemExistente) {
+                itemExistente.quantidade += 1;
+                itemExistente.total = itemExistente.precoUnitario * itemExistente.quantidade;
+            } else {
+                const novoItem = {
+                    id: itemId,
+                    produtoId: produto.id,
+                    nome: produto.nome,
+                    strains: state.strainsSelecionadas,
+                    quantidade: 1,
+                    quantidadePods: state.quantidadeSelecionada,
+                    precoUnitario: precoTotal,
+                    total: precoTotal,
+                    imagem: produto.imagem,
+                    desconto: calcularDesconto(produto.preco, state.quantidadeSelecionada)
+                };
+                carrinho.push(novoItem);
+            }
+            
+            atualizarCarrinho();
+        }
+
+        // Função para toggle carrinho
+        function toggleCart() {
+            const overlay = document.getElementById('cart-overlay');
+            const modal = document.getElementById('cart-modal');
+            
+            overlay.classList.toggle('open');
+            modal.classList.toggle('open');
+        }
+
+        // Função para atualizar carrinho
+        function atualizarCarrinho() {
+            const cartCount = document.getElementById('cart-count');
+            const cartBadge = document.getElementById('cart-badge');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            const totalPrice = document.getElementById('total-price');
+            
+            const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
+            const totalPreco = carrinho.reduce((total, item) => total + item.total, 0);
+            
+            cartCount.textContent = totalItens;
+            
+            if (totalItens > 0) {
+                cartBadge.textContent = totalItens;
+                cartBadge.classList.remove('hidden');
+            } else {
+                cartBadge.classList.add('hidden');
+            }
+            
+            if (carrinho.length === 0) {
+                cartItems.innerHTML = '<p class="text-gray-400 text-center py-8">Carrinho vazio</p>';
+                cartTotal.classList.add('hidden');
+            } else {
+                cartItems.innerHTML = carrinho.map(item => `
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <div class="flex items-center gap-3 mb-2">
+                            <img src="${item.imagem}" alt="${item.nome}" class="w-12 h-12 object-contain bg-gray-700 rounded">
+                            <div class="flex-1">
+                                <h4 class="text-white font-semibold text-sm">${item.nome}</h4>
+                                <p class="text-gray-400 text-xs">
+                                    ${item.quantidadePods} Pod${item.quantidadePods > 1 ? 's' : ''} - ${item.strains.join(', ')}
+                                </p>
+                                ${item.desconto > 0 ? `
+                                    <p class="text-green-400 text-xs font-bold">${item.desconto}% OFF aplicado</p>
+                                ` : ''}
+                            </div>
+                            <button onclick="removerDoCarrinho('${item.id}')" class="text-red-400 hover:bg-red-900/20 p-1 rounded">✕</button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <button onclick="atualizarQuantidadeItem('${item.id}', ${item.quantidade - 1})" 
+                                        class="w-8 h-8 border border-gray-600 rounded flex items-center justify-center hover:bg-gray-700">-</button>
+                                <span class="text-white font-semibold w-8 text-center">${item.quantidade}</span>
+                                <button onclick="atualizarQuantidadeItem('${item.id}', ${item.quantidade + 1})" 
+                                        class="w-8 h-8 border border-gray-600 rounded flex items-center justify-center hover:bg-gray-700">+</button>
+                            </div>
+                            <span class="text-cyan-400 font-bold">R$ ${item.total},00</span>
+                        </div>
+                    </div>
+                `).join('');
+                
+                cartTotal.classList.remove('hidden');
+                totalPrice.textContent = `R$ ${totalPreco},00`;
+            }
+        }
+
+        // Função para remover do carrinho
+        function removerDoCarrinho(itemId) {
+            carrinho = carrinho.filter(item => item.id !== itemId);
+            atualizarCarrinho();
+        }
+
+        // Função para atualizar quantidade do item
+        function atualizarQuantidadeItem(itemId, novaQuantidade) {
+            if (novaQuantidade === 0) {
+                removerDoCarrinho(itemId);
+                return;
+            }
+            
+            const item = carrinho.find(item => item.id === itemId);
+            if (item) {
+                item.quantidade = novaQuantidade;
+                item.total = item.precoUnitario * novaQuantidade;
+                atualizarCarrinho();
+            }
+        }
+
+        // Função para renderizar produtos
+        function renderizarProdutos() {
+            document.getElementById('produtos-exclusiva').innerHTML = produtos.exclusiva.map(produto => criarProdutoCard(produto, 'exclusiva')).join('');
+            document.getElementById('produtos-premium').innerHTML = produtos.premium.map(produto => criarProdutoCard(produto, 'premium')).join('');
+            document.getElementById('produtos-basica').innerHTML = produtos.basica.map(produto => criarProdutoCard(produto, 'basica')).join('');
+        }
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            renderizarProdutos();
+            atualizarCarrinho();
+        });
+
+        // Fechar carrinho ao clicar no overlay
+        document.getElementById('cart-overlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                toggleCart();
+            }
+        });
+    </script>
+</body>
+</html>
